@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
@@ -44,6 +45,12 @@ namespace StandartInputOutput {
       fileName = deserialized.fileName;
       content = deserialized.content;
       fileStream.Close();
+    }
+  }
+
+  class TextFileSearcher {
+    public string[] SearchFile (string directoryPath, string keyword) {
+      return Directory.GetFiles(directoryPath, keyword);
     }
   }
 

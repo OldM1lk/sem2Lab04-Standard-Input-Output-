@@ -147,7 +147,7 @@ namespace StandartInputOutput {
       Console.Clear();
       Console.WriteLine("Файл успешно открыт!\n");
 
-      FileStream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
+      FileStream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.ReadWrite);
       TextFile textFile = new TextFile(pathToFile, fileContent);
       CareTaker careTaker = new CareTaker();
       careTaker.SaveState(textFile);

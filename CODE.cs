@@ -7,16 +7,16 @@ using System.Xml.Serialization;
 namespace StandartInputOutput {
   [Serializable]
   class TextFile : IOriginator {
-    public string filePath;
+    public string path;
     public string content;
 
-    public TextFile(string filePath, string content) {
-      this.filePath = filePath;
+    public TextFile(string path, string content) {
+      this.path = path;
       this.content = content;
     }
 
     public void PrintContent() {
-      Console.WriteLine("Содержимое файла: " + content);
+      Console.WriteLine("Содержимое файла:\n" + content);
     }
 
     public void BinarySerialize(FileStream fileStream) {
@@ -29,7 +29,7 @@ namespace StandartInputOutput {
     public void BinaryDeserialize(FileStream fileStream) {
       BinaryFormatter binaryFormatter = new BinaryFormatter();
       TextFile deserialized = (TextFile)binaryFormatter.Deserialize(fileStream);
-      filePath = deserialized.filePath;
+      path = deserialized.path;
       content = deserialized.content;
       fileStream.Close();
     }
@@ -44,45 +44,45 @@ namespace StandartInputOutput {
     public void XMLDeserialize(FileStream fileStream) {
       XmlSerializer xmlSerializer = new XmlSerializer(this.GetType());
       TextFile deserialized = (TextFile)xmlSerializer.Deserialize(fileStream);
-      filePath = deserialized.filePath;
+      path = deserialized.path;
       content = deserialized.content;
       fileStream.Close();
     }
 
     object IOriginator.GetMemento() {
-      return new Memento { filePath = this.filePath, content = this.content };
+      return new Memento { path = this.path, content = this.content };
     }
 
     void IOriginator.SetMemento(object memento) {
       if (memento is Memento) {
         var temporaryMemento = memento as Memento;
-        filePath = temporaryMemento.filePath;
+        path = temporaryMemento.path;
         content = temporaryMemento.content;
       }
     }
   }
 
   class TextFileSearcher {
-    public Dictionary<string, List<string>> index = new Dictionary<string, List<string>>();
+    public Dictionary<string, List<string>> keywordFilesPairs = new Dictionary<string, List<string>>();
 
     public void SearchFile(string directoryPath, string keyword) {
       string[] files = Directory.GetFiles(directoryPath, keyword + ".txt", SearchOption.AllDirectories);
 
       foreach (string file in files) {
-        if (!index.ContainsKey(keyword)) {
-          index[keyword] = new List<string>();
+        if (!keywordFilesPairs.ContainsKey(keyword)) {
+          keywordFilesPairs[keyword] = new List<string>();
         }
-        index[keyword].Add(file);
+        keywordFilesPairs[keyword].Add(file);
       }
     }
 
     public void DisplayIndex() {
       Console.Clear();
-      foreach (var entry in index) {
-        Console.WriteLine("Ключевое слово: " + entry.Key);
+      foreach (var pair in keywordFilesPairs) {
+        Console.WriteLine("Ключевое слово: " + pair.Key);
         Console.WriteLine("\nРезультат Поиска: ");
 
-        foreach (string file in entry.Value) {
+        foreach (string file in pair.Value) {
           Console.WriteLine(" - " + file);
         }
       }
@@ -91,7 +91,7 @@ namespace StandartInputOutput {
   }
 
   class Memento {
-    public string filePath;
+    public string path;
     public string content;
   }
 
@@ -210,25 +210,29 @@ namespace StandartInputOutput {
 
             break;
           case 7:
-            typeOfSerialization *= (-1);
+            typeOfSerialization = -typeOfSerialization;
 
             Console.WriteLine("Тип сериализации изменен");
 
             break;
           case 8:
             Console.Write("\nВведите директорию поиска : ");
-            string pathOfSearching = Console.ReadLine();
+            string directoryOfSearching = Console.ReadLine();
             Console.Write("\nВведите ключевое слово: ");
             string keywordForSearching = Console.ReadLine();
 
             TextFileSearcher textFileSearcher = new TextFileSearcher();
-            textFileSearcher.SearchFile(pathOfSearching, keywordForSearching);
+            textFileSearcher.SearchFile(directoryOfSearching, keywordForSearching);
             textFileSearcher.DisplayIndex();
+
+            break;
+          default:
+            Console.WriteLine("Несуществующая опция");
 
             break;
         }
       }
-      
+
       Console.ReadKey();
     }
   }

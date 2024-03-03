@@ -229,6 +229,8 @@ namespace StandartInputOutput {
             break;
         }
       }
+      
+      Console.ReadKey();
     }
   }
 }

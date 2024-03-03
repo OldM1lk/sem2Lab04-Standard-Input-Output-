@@ -145,8 +145,7 @@ namespace StandartInputOutput {
       string pathToFile = Console.ReadLine();
       string fileContent = File.ReadAllText(pathToFile);
       Console.Clear();
-      Console.WriteLine("Файл успешно открыт!");
-      Console.Write("\nСодержимое файла: " + fileContent + "\n\n");
+      Console.WriteLine("Файл успешно открыт!\n");
 
       FileStream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
       TextFile textFile = new TextFile(pathToFile, fileContent);

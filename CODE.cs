@@ -213,6 +213,8 @@ namespace StandartInputOutput {
           case 7:
             typeOfSerialization *= (-1);
 
+            Console.WriteLine("Тип сериализации изменен");
+
             break;
           case 8:
             Console.Write("\nВведите директорию поиска : ");

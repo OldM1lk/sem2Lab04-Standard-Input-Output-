@@ -7,16 +7,16 @@ using System.Xml.Serialization;
 namespace StandartInputOutput {
   [Serializable]
   class TextFile : IOriginator {
-    public string path;
-    public string content;
+    public string Path;
+    public string Content;
 
-    public TextFile(string path, string content) {
-      this.path = path;
-      this.content = content;
+    public TextFile(string Path, string Content) {
+      this.Path = Path;
+      this.Content = Content;
     }
 
     public void PrintContent() {
-      Console.WriteLine("Содержимое файла:\n" + content);
+      Console.WriteLine("Содержимое файла:\n" + Content);
     }
 
     public void BinarySerialize(FileStream fileStream) {
@@ -29,8 +29,8 @@ namespace StandartInputOutput {
     public void BinaryDeserialize(FileStream fileStream) {
       BinaryFormatter binaryFormatter = new BinaryFormatter();
       TextFile deserialized = (TextFile)binaryFormatter.Deserialize(fileStream);
-      path = deserialized.path;
-      content = deserialized.content;
+      Path = deserialized.Path;
+      Content = deserialized.Content;
       fileStream.Close();
     }
 
@@ -44,20 +44,20 @@ namespace StandartInputOutput {
     public void XMLDeserialize(FileStream fileStream) {
       XmlSerializer xmlSerializer = new XmlSerializer(this.GetType());
       TextFile deserialized = (TextFile)xmlSerializer.Deserialize(fileStream);
-      path = deserialized.path;
-      content = deserialized.content;
+      Path = deserialized.Path;
+      Content = deserialized.Content;
       fileStream.Close();
     }
 
     object IOriginator.GetMemento() {
-      return new Memento { path = this.path, content = this.content };
+      return new Memento { Path = this.Path, Content = this.Content };
     }
 
     void IOriginator.SetMemento(object memento) {
       if (memento is Memento) {
         var temporaryMemento = memento as Memento;
-        path = temporaryMemento.path;
-        content = temporaryMemento.content;
+        Path = temporaryMemento.Path;
+        Content = temporaryMemento.Content;
       }
     }
   }
@@ -91,8 +91,8 @@ namespace StandartInputOutput {
   }
 
   class Memento {
-    public string path;
-    public string content;
+    public string Path;
+    public string Content;
   }
 
   public interface IOriginator {
@@ -123,7 +123,7 @@ namespace StandartInputOutput {
     }
 
     public void Edit(string newContent) {
-      textFile.content = newContent;
+      textFile.Content = newContent;
     }
 
     public void Save() {

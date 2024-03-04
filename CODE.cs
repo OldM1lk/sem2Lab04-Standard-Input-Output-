@@ -147,7 +147,6 @@ namespace StandartInputOutput {
       Console.Clear();
       Console.WriteLine("Файл успешно открыт!\n");
 
-      FileStream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.ReadWrite);
       TextFile textFile = new TextFile(pathToFile, fileContent);
       CareTaker careTaker = new CareTaker();
       careTaker.SaveState(textFile);
@@ -194,6 +193,8 @@ namespace StandartInputOutput {
 
             break;
           case 5:
+            FileStream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.ReadWrite);
+
             if (typeOfSerialization > 0) {
               textFile.BinarySerialize(fileStream);
             } else {
@@ -202,10 +203,12 @@ namespace StandartInputOutput {
 
             break;
           case 6:
+            FileStream fileStream1 = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
+
             if (typeOfSerialization > 0) {
-              textFile.BinaryDeserialize(fileStream);
+              textFile.BinaryDeserialize(fileStream1);
             } else {
-              textFile.XMLDeserialize(fileStream);
+              textFile.XMLDeserialize(fileStream1);
             }
 
             break;
